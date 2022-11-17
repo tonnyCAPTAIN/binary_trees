@@ -1,47 +1,48 @@
-nclude "binary_trees.h"
+#include "binary_trees.h"
+size_t binary_tree_balance2(const binary_tree_t *tree,
+			    const binary_tree_t *tree2);
 
 /**
- * binary_tree_is_leaf - checks if a node is a leaf
- * @node:  pointer to the node to check
- * Return: 1 if node is a leaf, otherwise 0
+ * binary_tree_balance2 - measures the balance factor of a binary tree
+ *
+ *@tree: pointer to tree
+ *@tree2: pointer to sub tree
+ *
+ *Return: Balance factor
  */
-int binary_tree_is_leaf(const binary_tree_t *node)
-{
-	if (node && !node->left  && !node->right)
-		return (1);
 
-	return (0);
+size_t binary_tree_balance2(const binary_tree_t *tree,
+			    const binary_tree_t *tree2)
+{
+int cont1 = 0, cont2 = 0;
+
+if (tree == NULL)
+return (0);
+
+if (tree->left != NULL)
+cont1 += binary_tree_balance2(tree->left, tree2);
+
+if (tree->right != NULL)
+cont2 += binary_tree_balance2(tree->right, tree2);
+
+if (tree == tree2)
+return (cont1 - cont2);
+if (cont1 > cont2)
+return (cont1 + 1);
+return (cont2 + 1);
 }
 
 /**
- * binary_tree_height - measures the height of a binary tree
- * @tree: pointer to the root node of the tree to measure the height of
+ * binary_tree_balance - measures the balance factor of a binary tree
  *
- * Return: the height of the tree. If tree is NULL, return 0
- */
-size_t binary_tree_height(const binary_tree_t *tree)
-{
-	size_t left, right;
-
-	if (tree == NULL || binary_tree_is_leaf(tree))
-		return (0);
-	left = binary_tree_height(tree->left);
-	right = binary_tree_height(tree->right);
-	if (left > right)
-		return (1 + left);
-	return (1 + right);
-}
-
-/**
- * binary_tree_balance - Measures the balance factor of a binary tree.
- * @tree: A pointer to the root node of the tree to measure the balance factor.
+ *@tree: pointer to tree
  *
- * Return: If tree is NULL, return 0, else return balance factor.
+ *Return: Balance factor
  */
+
 int binary_tree_balance(const binary_tree_t *tree)
 {
-	if (tree)
-		return (binary_tree_height(tree->left) - binary_tree_height(tree->right));
-
-	return (0);
+if (tree == NULL)
+return (0);
+return (binary_tree_balance2(tree, tree));
 }
